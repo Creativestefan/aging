@@ -1,0 +1,220 @@
+/* Timeline Scrubber Styles matching reference image & macOS Cursor */
+
+:root {
+  --timeline-bg: #F5EFEB;
+  --timeline-text-dark: #151312;
+  --timeline-text-muted: #88817B;
+  --timeline-tick-light: #D8D2CD;
+  --timeline-tick-dark: #151312;
+  --timeline-badge-bg: #141312;
+  --timeline-btn-bg: #EAE3DD;
+  --timeline-btn-hover: #DFD8D1;
+  --timeline-btn-border: rgba(0, 0, 0, 0.08);
+}
+
+.timeline-scrubber-container {
+  position: relative;
+  width: 100%;
+  max-width: 660px;
+  margin: 0 auto;
+  user-select: none;
+  outline: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  padding: 10px 0 20px;
+  box-sizing: border-box;
+}
+
+/* 1. Top Bar with "Day X" Pill */
+.timeline-top-bar {
+  position: relative;
+  width: 100%;
+  height: 38px;
+  margin-bottom: 12px;
+}
+
+.day-indicator-badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(-50%);
+  background-color: var(--timeline-badge-bg);
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  padding: 4px 14px;
+  border-radius: 9999px;
+  white-space: nowrap;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.22);
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* 2. Main Track & Ruler Area */
+.timeline-track-wrapper {
+  position: relative;
+  width: 100%;
+  height: 84px;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 8px;
+  cursor: ew-resize;
+}
+
+/* Needle Line Assembly */
+.timeline-needle-assembly {
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  width: 12px;
+  margin-left: -6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none; /* Mouse moves pass directly through to track */
+  z-index: 15;
+}
+
+/* Top Pin Dot */
+.needle-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--timeline-tick-dark);
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+
+/* Vertical Needle Line */
+.needle-line {
+  width: 1.75px;
+  flex: 1;
+  background-color: var(--timeline-tick-dark);
+}
+
+/* Synthetic Circular Thumb Element for grabbing and dragging */
+.synthetic-circular-thumb {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: grab;
+  pointer-events: auto;
+  transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.15s ease;
+  z-index: 18;
+  box-sizing: border-box;
+}
+
+.synthetic-circular-thumb:hover {
+  transform: translate(-50%, 50%) scale(1.06);
+}
+
+.timeline-needle-assembly.is-dragging .synthetic-circular-thumb {
+  cursor: grabbing;
+  transform: translate(-50%, 50%) scale(1.1);
+}
+
+.thumb-arrows-svg {
+  display: block;
+  pointer-events: none;
+}
+
+/* 3. Ticks Row */
+.timeline-ticks {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 36px;
+  cursor: ew-resize;
+}
+
+.timeline-tick {
+  border-radius: 1px;
+  cursor: ew-resize;
+  flex-shrink: 0;
+  transform-origin: bottom;
+}
+
+/* 4. Labels Row */
+.timeline-labels {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding: 0 2px;
+  box-sizing: border-box;
+}
+
+.label-start,
+.label-end,
+.label-bud,
+.label-duration,
+.label-wilted {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.8px;
+  color: var(--timeline-text-muted);
+  text-transform: uppercase;
+}
+
+.label-duration {
+  position: absolute;
+  left: 48%;
+  transform: translateX(-50%);
+  letter-spacing: 0.6px;
+}
+
+/* 5. Bottom Controls */
+.timeline-bottom-controls {
+  margin-top: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.play-life-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--timeline-btn-bg);
+  border: 1px solid var(--timeline-btn-border);
+  border-radius: 9999px;
+  padding: 6px 16px;
+  color: var(--timeline-text-dark);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: all 0.15s ease;
+  outline: none;
+}
+
+.play-life-button:hover {
+  background-color: var(--timeline-btn-hover);
+  border-color: rgba(0, 0, 0, 0.12);
+  transform: translateY(-0.5px);
+}
+
+.play-life-button:active {
+  transform: translateY(0.5px);
+  background-color: #D5CEC7;
+}
+
+.play-life-button.playing {
+  background-color: #E2DBD4;
+}
+
+.control-icon {
+  display: inline-block;
+  flex-shrink: 0;
+  color: var(--timeline-text-dark);
+}

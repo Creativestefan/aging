@@ -1,0 +1,53 @@
+.weight-morph-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+  margin-bottom: 24px;
+}
+
+.weight-morph-stage {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  height: 440px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.weight-morph-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  will-change: opacity, transform;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+@media (max-width: 640px) {
+  .weight-morph-stage {
+    max-width: 320px;
+    height: 320px;
+  }
+}
+
+.weight-display-label {
+  font-size: 24px;
+  font-weight: 500;
+  color: #151312;
+  margin-top: 14px;
+  letter-spacing: -0.3px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
