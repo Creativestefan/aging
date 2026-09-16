@@ -13,8 +13,8 @@ export function App() {
         initialDay={8}
         onDayChange={setActiveDay}
       />
-      {/* DialKit Root for live parameter tuning */}
-      <DialRoot />
+      {/* DialKit Root for live parameter tuning (enabled in production) */}
+      <DialRoot productionEnabled={true} />
     </main>
   );
 }
