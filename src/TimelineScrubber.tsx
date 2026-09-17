@@ -149,36 +149,72 @@ const MONTH_NAMES = [
   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
 ];
 
-function parseDateString(str: string): Date {
-  if (!str) return new Date(2026, 0, 1);
-  const parts = str.trim().split(/\s+/);
-  if (parts.length >= 2) {
-    const mStr = parts[0].slice(0, 3).toLowerCase();
-    const monthIndex = MONTH_NAMES.findIndex(
-      (m) => m.toLowerCase() === mStr
-    );
-    const day = parseInt(parts[1], 10);
-    if (monthIndex !== -1 && !isNaN(day)) {
-      return new Date(2026, monthIndex, day);
-    }
-  }
-  return new Date(2026, 0, 1);
+interface ParsedDateResult {
+  date: Date;
+  hasYear: boolean;
+  hasDay: boolean;
 }
 
-function formatTimelineDate(date: Date): string {
-  const month = MONTH_NAMES[date.getMonth()];
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${month} ${day}`;
+function parseFlexibleDate(str: string, defaultYear = 2026): ParsedDateResult {
+  if (!str) {
+    return { date: new Date(defaultYear, 0, 1), hasYear: false, hasDay: false };
+  }
+  const cleaned = str.trim().replace(/,/g, '');
+  const tokens = cleaned.split(/\s+/);
+
+  let monthIndex = -1;
+  let year = defaultYear;
+  let hasYear = false;
+  let day = 1;
+  let hasDay = false;
+
+  for (const token of tokens) {
+    const num = parseInt(token, 10);
+    if (!isNaN(num)) {
+      if (num >= 1900 && num <= 2100) {
+        year = num;
+        hasYear = true;
+      } else if (num >= 1 && num <= 31) {
+        day = num;
+        hasDay = true;
+      }
+    } else {
+      const mStr = token.slice(0, 3).toLowerCase();
+      const idx = MONTH_NAMES.findIndex((m) => m.toLowerCase() === mStr);
+      if (idx !== -1) {
+        monthIndex = idx;
+      }
+    }
+  }
+
+  if (monthIndex === -1) monthIndex = 0;
+  return { date: new Date(year, monthIndex, day), hasYear, hasDay };
 }
 
 function calculateInterpolatedDate(fraction: number, startStr: string, endStr: string): string {
   try {
-    const dStart = parseDateString(startStr);
-    const dEnd = parseDateString(endStr);
-    const tStart = dStart.getTime();
-    const tEnd = dEnd.getTime();
+    const pStart = parseFlexibleDate(startStr, 2026);
+    const pEnd = parseFlexibleDate(endStr, pStart.hasYear ? pStart.date.getFullYear() : 2026);
+
+    const tStart = pStart.date.getTime();
+    const tEnd = pEnd.date.getTime();
     const currentT = tStart + fraction * (tEnd - tStart);
-    return formatTimelineDate(new Date(currentT));
+    const d = new Date(currentT);
+
+    const month = MONTH_NAMES[d.getMonth()];
+    const day = String(d.getDate()).padStart(2, '0');
+    const year = d.getFullYear();
+
+    const includeYear = pStart.hasYear || pEnd.hasYear;
+    const includeDay = pStart.hasDay || pEnd.hasDay;
+
+    if (includeYear && includeDay) {
+      return `${month} ${day}, ${year}`;
+    } else if (includeYear && !includeDay) {
+      return `${month} ${year}`;
+    } else {
+      return `${month} ${day}`;
+    }
   } catch {
     return startStr;
   }
@@ -189,8 +225,8 @@ export const TimelineScrubber: React.FC<TimelineScrubberProps> = ({
   initialDay = 8,
   startWeight = 300,
   endWeight = 130,
-  startDate = 'JAN 01',
-  endDate = 'JUN 01',
+  startDate = 'Sep 2026',
+  endDate = 'Mar 2027',
   onDayChange,
   onWeightChange,
 }) => {
