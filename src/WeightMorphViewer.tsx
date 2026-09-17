@@ -165,9 +165,9 @@ const MilestoneLayer: React.FC<ImageLayerProps> = ({
 export const WeightMorphViewer: React.FC<WeightMorphViewerProps> = ({
   weight = 300,
   weightMotion,
-  stageHeight = 440,
-  morphIntensity = 0.015,
-  fadeBlur = 8,
+  stageHeight = 420,
+  morphIntensity = 0.004,
+  fadeBlur = 1,
 }) => {
   const [currentDisplayWeight, setCurrentDisplayWeight] = useState<number>(() => {
     if (weightMotion) {

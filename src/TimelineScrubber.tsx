@@ -172,25 +172,25 @@ export const TimelineScrubber: React.FC<TimelineScrubberProps> = ({
       thumb: {
         show: true, // Toggle Synthetic Circular Thumb grab handle
         size: [40, 24, 60, 2], // Thumb diameter (px)
-        background: '#FFFFFF', // Thumb background color
-        borderColor: '#151312', // Thumb border color
-        borderWidth: [1.5, 0, 10, 0.5], // Thumb border width (px)
-        blur: [0, 0, 30, 1], // Thumb backdrop blur (px)
+        background: '#fffffff2', // Thumb background color
+        borderColor: '#15131247', // Thumb border color
+        borderWidth: [0.0, 0, 10, 0.5], // Thumb border width (px)
+        blur: [11, 0, 30, 1], // Thumb backdrop blur (px)
         shadow: [8, 0, 40, 1], // Thumb shadow blur radius (px)
         shadowOpacity: [0.16, 0, 1, 0.02], // Thumb shadow opacity
       },
       needle: {
-        height: [88, 20, 130, 1], // Vertical needle bar height (px)
+        height: [55, 20, 130, 1], // Vertical needle bar height (px)
         width: [1.75, 1, 4, 0.25], // Vertical needle bar thickness
-        showLabel: true, // Toggle needle weight pill label
+        showLabel: false, // Toggle needle weight pill label
         activeColor: '#151312', // Needle and active tick color
         mutedColor: '#D8D2CD', // Idle tick color
       },
       wave: {
-        peakHeight: [29, 20, 50, 1], // Maximum tick height near cursor
+        peakHeight: [36, 20, 50, 1], // Maximum tick height near cursor
         baseHeight: [16, 10, 26, 1], // Default resting tick height
-        waveRadius: [90, 40, 180, 5], // Influence radius of magnification wave
-        stiffness: [240, 50, 500, 10], // Spring physics stiffness
+        waveRadius: [115, 40, 180, 5], // Influence radius of magnification wave
+        stiffness: [190, 50, 500, 10], // Spring physics stiffness
         damping: [18, 5, 50, 1], // Spring physics damping
       },
       playback: {
@@ -201,8 +201,8 @@ export const TimelineScrubber: React.FC<TimelineScrubberProps> = ({
       morph: {
         showVisual: true, // Toggle centered weight morphing image sequence
         stageHeight: [420, 240, 580, 10], // Visual image stage height (px)
-        morphIntensity: [0.015, 0, 0.05, 0.002], // Scale breathing intensity during crossfade
-        fadeBlur: [8, 0, 30, 1], // Blur amount as image fades out (px)
+        morphIntensity: [0.004, 0, 0.05, 0.001], // Scale breathing intensity during crossfade
+        fadeBlur: [1, 0, 30, 1], // Blur amount as image fades out (px)
       },
       reset: { type: 'action' as const, label: 'Reset All Settings' },
     },
