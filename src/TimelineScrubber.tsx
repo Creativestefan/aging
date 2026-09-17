@@ -35,6 +35,8 @@ export interface TimelineScrubberProps {
   initialDay?: number;
   startWeight?: number;
   endWeight?: number;
+  startDate?: string;
+  endDate?: string;
   season?: string;
   onDayChange?: (day: number) => void;
   onWeightChange?: (weight: number) => void;
@@ -147,6 +149,8 @@ export const TimelineScrubber: React.FC<TimelineScrubberProps> = ({
   initialDay = 8,
   startWeight = 300,
   endWeight = 130,
+  startDate = 'Jan 01',
+  endDate = 'Jun 01',
   onDayChange,
   onWeightChange,
 }) => {
@@ -196,7 +200,9 @@ export const TimelineScrubber: React.FC<TimelineScrubberProps> = ({
       playback: {
         dragOnly: true, // true: Drag needle/thumb to scrub; false: Hover follow
         playDuration: [6.5, 1, 20, 0.5], // Playback duration in seconds
-        showBottomLabels: true, // Toggle 300 LBS and 130 LBS bottom labels
+        showBottomLabels: true, // Toggle bottom date labels
+        startDate: startDate, // Start date label (left)
+        endDate: endDate, // End date label (right)
       },
       morph: {
         showVisual: true, // Toggle centered weight morphing image sequence
@@ -582,8 +588,8 @@ export const TimelineScrubber: React.FC<TimelineScrubberProps> = ({
       {/* Labels Row */}
       {dial.playback.showBottomLabels && (
         <div className="timeline-labels">
-          <span className="label-start">300 LBS</span>
-          <span className="label-end">130 LBS</span>
+          <span className="label-start">{dial.playback.startDate}</span>
+          <span className="label-end">{dial.playback.endDate}</span>
         </div>
       )}
 
