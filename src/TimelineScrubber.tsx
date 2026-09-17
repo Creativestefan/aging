@@ -189,8 +189,8 @@ export const TimelineScrubber: React.FC<TimelineScrubberProps> = ({
   initialDay = 8,
   startWeight = 300,
   endWeight = 130,
-  startDate = 'Jan 01',
-  endDate = 'Jun 01',
+  startDate = 'JAN 01',
+  endDate = 'JUN 01',
   onDayChange,
   onWeightChange,
 }) => {
@@ -629,8 +629,8 @@ export const TimelineScrubber: React.FC<TimelineScrubberProps> = ({
       {/* Labels Row */}
       {dial.playback.showBottomLabels && (
         <div className="timeline-labels">
-          <span className="label-start">{dial.playback.startDate}</span>
-          <span className="label-end">{dial.playback.endDate}</span>
+          <span className="label-start">{dial.playback.startDate?.toUpperCase()}</span>
+          <span className="label-end">{dial.playback.endDate?.toUpperCase()}</span>
         </div>
       )}
 
