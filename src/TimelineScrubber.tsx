@@ -144,6 +144,46 @@ function TimelineTick({
   );
 }
 
+const MONTH_NAMES = [
+  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+];
+
+function parseDateString(str: string): Date {
+  if (!str) return new Date(2026, 0, 1);
+  const parts = str.trim().split(/\s+/);
+  if (parts.length >= 2) {
+    const mStr = parts[0].slice(0, 3).toLowerCase();
+    const monthIndex = MONTH_NAMES.findIndex(
+      (m) => m.toLowerCase() === mStr
+    );
+    const day = parseInt(parts[1], 10);
+    if (monthIndex !== -1 && !isNaN(day)) {
+      return new Date(2026, monthIndex, day);
+    }
+  }
+  return new Date(2026, 0, 1);
+}
+
+function formatTimelineDate(date: Date): string {
+  const month = MONTH_NAMES[date.getMonth()];
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${month} ${day}`;
+}
+
+function calculateInterpolatedDate(fraction: number, startStr: string, endStr: string): string {
+  try {
+    const dStart = parseDateString(startStr);
+    const dEnd = parseDateString(endStr);
+    const tStart = dStart.getTime();
+    const tEnd = dEnd.getTime();
+    const currentT = tStart + fraction * (tEnd - tStart);
+    return formatTimelineDate(new Date(currentT));
+  } catch {
+    return startStr;
+  }
+}
+
 export const TimelineScrubber: React.FC<TimelineScrubberProps> = ({
   totalDays = 21,
   initialDay = 8,
@@ -186,7 +226,7 @@ export const TimelineScrubber: React.FC<TimelineScrubberProps> = ({
       needle: {
         height: [55, 20, 130, 1], // Vertical needle bar height (px)
         width: [1.75, 1, 4, 0.25], // Vertical needle bar thickness
-        showLabel: false, // Toggle needle weight pill label
+        showLabel: true, // Toggle needle floating date badge pill
         activeColor: '#151312', // Needle and active tick color
         mutedColor: '#D8D2CD', // Idle tick color
       },
@@ -249,6 +289,12 @@ export const TimelineScrubber: React.FC<TimelineScrubberProps> = ({
   );
 
   const displayWeight = calculateWeight(displayDay);
+  const displayFraction = (displayDay - 1) / Math.max(1, totalDays - 1);
+  const displayDate = calculateInterpolatedDate(
+    displayFraction,
+    dial.playback.startDate,
+    dial.playback.endDate
+  );
 
   const smoothNeedleX = useSpring(relativePointerX, {
     mass: 0.08,
@@ -481,18 +527,6 @@ export const TimelineScrubber: React.FC<TimelineScrubberProps> = ({
         />
       )}
 
-      {/* Top Floating Weight Pill */}
-      {dial.needle.showLabel && (
-        <div className="timeline-top-bar">
-          <motion.div
-            className="day-indicator-badge"
-            style={{ x: smoothNeedleX }}
-          >
-            {displayWeight} lbs
-          </motion.div>
-        </div>
-      )}
-
       {/* Main Interactive Track Area with macOS Scrubber Cursor */}
       <div
         className={`timeline-track-wrapper ${isHovered ? 'cursor-active' : ''}`}
@@ -511,6 +545,13 @@ export const TimelineScrubber: React.FC<TimelineScrubberProps> = ({
             height: `${dial.needle.height}px`,
           }}
         >
+          {/* Floating Date Badge Pill directly anchored above needle top dot */}
+          {dial.needle.showLabel && (
+            <div className="day-indicator-badge">
+              {displayDate}
+            </div>
+          )}
+
           {/* Top pin dot */}
           <div
             className="needle-dot"
